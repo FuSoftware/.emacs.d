@@ -1,0 +1,15 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("org-work"
+ (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/work/notes.org")
+ (front-context-string . "#+TODO: TODO(t) ")
+ (rear-context-string)
+ (position . 1))
+("notes.org"
+ (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/work/notes.org")
+ (front-context-string . "#+TODO: TODO(t) ")
+ (rear-context-string)
+ (position . 1))
+)
