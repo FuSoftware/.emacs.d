@@ -15,7 +15,7 @@
     (("marmalade" . "https://marmalade-repo.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
      ("elpa" . "https://elpa.gnu.org/packages/"))))
- '(package-selected-packages (quote (use-package))))
+ '(package-selected-packages (quote (dart-mode use-package))))
 
 ;; Refresh the package list
 (package-initialize)
@@ -103,6 +103,14 @@
 (setq column-number-mode t)
 
 ;;-----------------------------------------------------------------------------
+;; Dart Mode
+;;-----------------------------------------------------------------------------
+
+(use-package dart-mode
+  :ensure t
+  )
+
+;;-----------------------------------------------------------------------------
 ;; ORG MODE
 ;;-----------------------------------------------------------------------------
 (require 'org)
@@ -114,6 +122,10 @@
 ;; All org files
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'org-indent-mode)
+
+;; Define the org mode keymaps
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
 
 (setq org-file-apps '(
     (auto-mode . emacs)
