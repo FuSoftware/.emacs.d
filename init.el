@@ -2,6 +2,12 @@
 ;; Init Stuff
 ;;-----------------------------------------------------------------------------
 
+;; UTF-8 as default encoding
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
 ;; Package repositories
 (require 'package)
 (custom-set-variables
@@ -11,11 +17,10 @@
  ;; If there is more than one, they won't work right.
  '(load-prefer-newer t)
  '(package-archives
-   (quote
-    (("marmalade" . "https://marmalade-repo.org/packages/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("elpa" . "https://elpa.gnu.org/packages/"))))
- '(package-selected-packages (quote (dart-mode use-package))))
+   '(("melpa" . "https://melpa.org/packages/")
+     ("elpa" . "https://elpa.gnu.org/packages/")))
+ '(package-selected-packages
+   '(org-wiki helm-core async visual-fill-column telega rainbow-identifiers dart-mode use-package)))
 
 ;; Refresh the package list
 (package-initialize)
@@ -26,6 +31,7 @@
 (when (not (package-installed-p 'use-package))
     (package-install 'use-package))
 (require 'use-package)
+(setq use-package-always-ensure t)
 
 ;; Hook to report the start time of Emacs
 (add-hook 'emacs-startup-hook
@@ -40,15 +46,16 @@
 ;; Generic Packages
 ;;-----------------------------------------------------------------------------
 
-;; Install QUELPA
+; Install QUELPA
 ;(use-package quelpa
-;    :defer nil
-;    :config
-;    (quelpa
-;        '(quelpa-use-package
-;            :fetcher git
-;            :url "https://github.com/quelpa/quelpa-use-package.git"))
-;    (require 'quelpa-use-package))
+;  :ensure t
+;  :defer nil
+;  :config
+;  (quelpa
+;    '(quelpa-use-package
+;      :fetcher git
+;      :url "https://github.com/quelpa/quelpa-use-package.git"))
+;  (require 'quelpa-use-package))
 ;(require 'quelpa)
 ;(quelpa-use-package-activate-advice)
 
@@ -156,6 +163,12 @@
 
 ;; Set the tags column align right at 80 columns
 (setq org-tags-column 80)
+
+;; Set the Agenda Custom Commands
+(setq org-agenda-custom-commands
+      '(("p" tags-todo "af|prog|tests|syno|mes|")
+	 ("s" todo "STARTED")
+	 ("n" todo "NEXT")))
 
 ;; Org Wiki Publishing
 (setq org-publish-project-alist
