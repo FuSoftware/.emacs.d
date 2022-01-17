@@ -8,6 +8,9 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
+;; Load Paths
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 ;; Package repositories
 (require 'package)
 (custom-set-variables
@@ -20,7 +23,7 @@
    '(("melpa" . "https://melpa.org/packages/")
      ("elpa" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(org-wiki helm-core async visual-fill-column telega rainbow-identifiers dart-mode use-package)))
+   '(ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column telega rainbow-identifiers dart-mode use-package)))
 
 ;; Refresh the package list
 (package-initialize)
@@ -108,14 +111,31 @@
 
 (set-frame-font "DejaVu Sans Mono 12" nil t)
 (setq column-number-mode t)
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
+(setq-default display-line-numbers-width 4)
 
 ;;-----------------------------------------------------------------------------
-;; Dart Mode
+;; Linum
 ;;-----------------------------------------------------------------------------
-
-(use-package dart-mode
-  :ensure t
-  )
+;
+;(defvar my-linum-current-line-number 0)
+;
+;(setq linum-format 'my-linum-relative-line-numbers)
+;
+;(defun my-linum-relative-line-numbers (line-number)
+  ;(let ((test2 (- line-number my-linum-current-line-number)))
+    ;(propertize
+     ;(number-to-string (cond ((<= test2 0) (* -1 test2))
+                             ;((> test2 0) test2)))
+     ;'face 'linum)))
+;
+;(defadvice linum-update (around my-linum-update)
+  ;(let ((my-linum-current-line-number (line-number-at-pos)))
+    ;ad-do-it))
+;(ad-activate 'linum-update)
+;
+;(global-linum-mode t)
 
 ;;-----------------------------------------------------------------------------
 ;; ORG MODE
@@ -169,6 +189,41 @@
       '(("p" tags-todo "af|prog|tests|syno|mes|")
 	 ("s" todo "STARTED")
 	 ("n" todo "NEXT")))
+
+;; TaskJuggler
+(add-to-list 'org-export-backends 'taskjuggler)
+(require 'ox-taskjuggler)
+(setq org-taskjuggler-default-reports
+'("textreport report \"Plan\" {
+formats html
+header '== %title =='
+center -8<-
+[#Plan Plan] | [#Resource_Allocation Resource Allocation]
+----
+=== Plan ===
+<[report id=\"plan\"]>
+----
+=== Resource Allocation ===
+<[report id=\"resourceGraph\"]>
+->8-
+}
+# A traditional Gantt chart with a project overview.
+taskreport plan \"\" {
+headline \"Project Plan\"
+columns bsi, name, start, end, effort, effortdone, effortleft, chart { width 1200 }
+loadunit shortauto
+hideresource 1
+}
+# A graph showing resource allocation. It identifies whether each
+# resource is under- or over-allocated for.
+resourcereport resourceGraph \"\" {
+headline \"Resource Allocation Graph\"
+columns no, name, effort, weekly { width 1200 }
+loadunit shortauto
+hidetask ~(isleaf() & isleaf_())
+sorttasks plan.start.up
+}")
+)
 
 ;; Org Wiki Publishing
 (setq org-publish-project-alist
@@ -250,11 +305,36 @@
     :preface (fset 'evil-redirect-digit-argument 'ignore)
     :hook (org-mode . (lambda () evil-org-mode))
     :config
-    (add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
-    (evil-define-key 'motion 'evil-org-mode
-        (kbd "0") 'evil-org-beginning-of-line)
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))
+
+;;-----------------------------------------------------------------------------
+;; Dart Mode
+;;-----------------------------------------------------------------------------
+
+(use-package dart-mode
+  :ensure t
+  )
+
+(use-package ob-dart
+  :ensure t
+  :config (add-to-list 'org-babel-load-languages '(dart . t)))
+
+;;-----------------------------------------------------------------------------
+;; Nim Mode
+;;-----------------------------------------------------------------------------
+
+(use-package nim-mode
+  :ensure t
+  )
+
+(use-package ob-nim
+  :ensure t
+  :config (add-to-list 'org-babel-load-languages '(nim . t)))
+
+;;-----------------------------------------------------------------------------
+;; Faces
+;;-----------------------------------------------------------------------------
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
