@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-wiki"
+(("org-blog"
+ (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/blog/")
+ (front-context-string)
+ (rear-context-string . "  8 04-22 15:02 ")
+ (position . 301))
+("org-wiki"
  (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/wiki/")
  (front-context-string . "creation_databas")
  (rear-context-string . "624 10-28 14:19 ")

@@ -23,7 +23,7 @@
    '(("melpa" . "https://melpa.org/packages/")
      ("elpa" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column telega rainbow-identifiers dart-mode use-package)))
+   '(org-roam ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column rainbow-identifiers dart-mode use-package)))
 
 ;; Refresh the package list
 (package-initialize)
@@ -292,6 +292,9 @@ sorttasks plan.start.up
 (unless (package-installed-p 'evil)
     (package-install 'evil))
 
+;; Regain org-mode TAB functionality
+(setq evil-want-C-i-jump nil)
+
 ;; Enable Evil
 (require 'evil)
 (evil-mode 1)
@@ -307,6 +310,46 @@ sorttasks plan.start.up
     :config
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))
+
+;;-----------------------------------------------------------------------------
+;; Org Roam
+;;-----------------------------------------------------------------------------
+
+(use-package org-roam
+  :ensure t
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :custom
+  (org-roam-directory (file-truename "C:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/roam"))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
+  ;; Capture templates
+  (setq org-roam-capture-templates
+      '(("m" "main" plain
+         "%?"
+         :if-new (file+head "main/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("r" "reference" plain "%?"
+         :if-new
+         (file+head "reference/${title}.org" "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("a" "article" plain "%?"
+         :if-new
+         (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n")
+         :immediate-finish t
+         :unnarrowed t))))
 
 ;;-----------------------------------------------------------------------------
 ;; Dart Mode
@@ -341,7 +384,7 @@ sorttasks plan.start.up
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#839496" :background "#002b36"))))
+ '(default ((t (:foreground "#BBC2CF"))))
  '(org-level-1 ((t (:foreground "#BF9D7A"))))
  '(org-level-2 ((t (:foreground "#E4E9CD"))))
  '(org-level-3 ((t (:foreground "#EBF2EA"))))
