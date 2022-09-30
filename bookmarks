@@ -1,8 +1,25 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-blog"
+(("scripts"
+ (filename . "d:/scripts/deltav/")
+ (front-context-string . "outils fhx\n  drw")
+ (rear-context-string . "096 07-04 10:34 ")
+ (position . 624)
+ (last-modified 25282 44695 326461 0))
+("scripts-dart"
+ (filename . "d:/scripts/deltav/outils fhx/")
+ (front-context-string . "checkup.bat\n  -r")
+ (rear-context-string . "301 05-30 18:52 ")
+ (position . 227)
+ (last-modified 25282 44685 422519 0))
+("org-capture-last-stored"
+ (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/roam/main/feed_forward.org")
+ (front-context-string)
+ (rear-context-string . " le FeedForward\n")
+ (position . 511))
+("org-blog"
  (filename . "c:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/blog/")
  (front-context-string)
  (rear-context-string . "  8 04-22 15:02 ")

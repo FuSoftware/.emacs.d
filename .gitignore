@@ -13,4 +13,5 @@
 # Elpa folder
 elpa/*
 auto-save-list/*
+eln-cache/*
 .cache/*

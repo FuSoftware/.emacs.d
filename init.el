@@ -8,6 +8,11 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
+;; Disable GUI Features
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+
 ;; Load Paths
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
@@ -23,7 +28,7 @@
    '(("melpa" . "https://melpa.org/packages/")
      ("elpa" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(org-roam ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column rainbow-identifiers dart-mode use-package)))
+   '(company lsp-dart lsp-mode org-roam ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column rainbow-identifiers dart-mode use-package)))
 
 ;; Refresh the package list
 (package-initialize)
@@ -106,6 +111,29 @@
   (load-theme 'solarized-dark t)
 
 ;;-----------------------------------------------------------------------------
+;; Dired
+;;-----------------------------------------------------------------------------
+(eval-after-load "dired" '(progn
+	(define-key dired-mode-map [backspace] 'dired-up-directory)))
+
+;;-----------------------------------------------------------------------------
+;; Sunrise-Commander
+;;-----------------------------------------------------------------------------
+
+;(require 'sunrise)
+;(global-set-key "\C-x\C-f" 'sunrise-cd)
+
+;;-----------------------------------------------------------------------------
+;; Visual basic Script Mode
+;;-----------------------------------------------------------------------------
+
+(require 'vbs-repl)
+(setq auto-mode-alist
+      (append '(("\\.\\(vbs\\|wsf\\)$" . vbscript-mode))
+	      auto-mode-alist))
+
+
+;;-----------------------------------------------------------------------------
 ;; Generic Settings
 ;;-----------------------------------------------------------------------------
 
@@ -146,9 +174,16 @@
 (setq org-agenda-files '("C:\\Users\\florent.uguet\\OneDrive - VINCI Energies\\Perso\\org\\work"))
 (setq org-log-done t)
 
+;; Org Settings
+(setq org-enforce-todo-dependencies t)
+(setq org-agenda-dim-blocked-tasks 'invisible)
+
 ;; All org files
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 (add-hook 'org-mode-hook 'org-indent-mode)
+
+;; Org Outlook
+(require 'org-outlook)
 
 ;; Define the org mode keymaps
 (define-key global-map "\C-cl" 'org-store-link)
@@ -329,9 +364,19 @@ sorttasks plan.start.up
   :config
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (setq org-roam-db-location "C:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/roam/org-roam.db")
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
   (require 'org-roam-protocol)
+  ;; Draft by default
+  ;(defun jethro/tag-new-node-as-draft ()
+  ;  (org-roam-tag-add '("draft")))
+  ;(add-hook 'org-roam-capture-new-node-hook #'jethro/tag-new-node-as-draft)
+  ;; Thought Inbox
+  (setq org-capture-templates
+      ;; other capture templates
+      '(("s" "Slipbox" entry  (file "C:/Users/florent.uguet/OneDrive - VINCI Energies/Perso/org/roam/inbox.org")
+       "* %?\n")))
   ;; Capture templates
   (setq org-roam-capture-templates
       '(("m" "main" plain
@@ -352,16 +397,36 @@ sorttasks plan.start.up
          :unnarrowed t))))
 
 ;;-----------------------------------------------------------------------------
+;; LSP
+;;-----------------------------------------------------------------------------
+
+(use-package flycheck
+  :ensure t)
+
+(use-package lsp-mode
+  :ensure t
+  :hook ((nim-mode dart-mode). lsp)
+  :commands lsp)
+
+(use-package company
+  :ensure t)
+
+
+;;-----------------------------------------------------------------------------
 ;; Dart Mode
 ;;-----------------------------------------------------------------------------
 
 (use-package dart-mode
-  :ensure t
-  )
+  :ensure t)
+
+(use-package lsp-dart
+  :ensure t)
 
 (use-package ob-dart
   :ensure t
   :config (add-to-list 'org-babel-load-languages '(dart . t)))
+
+(add-hook 'dart-mode-hook 'lsp)
 
 ;;-----------------------------------------------------------------------------
 ;; Nim Mode
@@ -375,6 +440,11 @@ sorttasks plan.start.up
   :ensure t
   :config (add-to-list 'org-babel-load-languages '(nim . t)))
 
+;; Org-Babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
 ;;-----------------------------------------------------------------------------
 ;; Faces
 ;;-----------------------------------------------------------------------------
@@ -384,7 +454,7 @@ sorttasks plan.start.up
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#BBC2CF"))))
+ '(default ((((class color) (min-colors 89)) (:foreground "#839496" :background "#002b36"))))
  '(org-level-1 ((t (:foreground "#BF9D7A"))))
  '(org-level-2 ((t (:foreground "#E4E9CD"))))
  '(org-level-3 ((t (:foreground "#EBF2EA"))))
