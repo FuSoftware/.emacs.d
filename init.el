@@ -28,7 +28,7 @@
    '(("melpa" . "https://melpa.org/packages/")
      ("elpa" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   '(company lsp-dart lsp-mode org-roam ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column rainbow-identifiers dart-mode use-package)))
+   '(magit ccls company-lsp company lsp-dart lsp-mode org-roam ob-nim nim-mode ob-dart org-wiki helm-core async visual-fill-column rainbow-identifiers dart-mode use-package)))
 
 ;; Refresh the package list
 (package-initialize)
@@ -115,6 +115,13 @@
 ;;-----------------------------------------------------------------------------
 (eval-after-load "dired" '(progn
 	(define-key dired-mode-map [backspace] 'dired-up-directory)))
+
+;;-----------------------------------------------------------------------------
+;; Magit
+;;-----------------------------------------------------------------------------
+
+(use-package magit
+  :ensure t)
 
 ;;-----------------------------------------------------------------------------
 ;; Sunrise-Commander
@@ -411,6 +418,18 @@ sorttasks plan.start.up
 (use-package company
   :ensure t)
 
+;;-----------------------------------------------------------------------------
+;; CCLS
+;;-----------------------------------------------------------------------------
+
+(use-package ccls
+  :ensure t
+  :config
+  (setq ccls-executable "ccls")
+  (setq lsp-prefer-flymake nil)
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp))))
 
 ;;-----------------------------------------------------------------------------
 ;; Dart Mode
